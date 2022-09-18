@@ -3,7 +3,7 @@ const attemp = process.env.ATTEMP;
 
 async function up (queryInterface, {DataTypes}) {
     await queryInterface.addColumn('users', 
-        "maxAttempts",  {type:DataTypes.INTEGER, defaultValue: attemp}
+        "resetLink",  {type:DataTypes.STRING}
     )
 }
 

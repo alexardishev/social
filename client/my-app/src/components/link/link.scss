@@ -1,0 +1,14 @@
+.linkBar {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-left: 34px;
+    &:hover{
+        color: #FFFFFF
+    }
+}

@@ -1,0 +1,14 @@
+.navbar1 {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    &_wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 33px;
+        min-width: 300px;
+        // padding-right: 72px;
+        // padding-top: 20px;
+    }
+}

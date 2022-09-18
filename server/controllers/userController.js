@@ -19,40 +19,44 @@ const generateJwt = (id, email, role, activationLink) => {
 
 class UserController {
     async registration(req, res, next) {
-
-            const {email, password, role} = req.body
-            if (!email || !password) {
-                return next(ApiError.badRequest('Неккоректный email или пароль'))
+            try {
+                let {email, password, role} = req.body
+                if (!email || !password) {
+                    return next(ApiError.badRequest('Неккоректный email или пароль'))
+                }
+    
+                email = email.toLowerCase();
+                const check = await User.findOne({where: {email}});
+    
+                if(check) {
+                 return next(ApiError.badRequest({msg:"Пользователь с таким email уже зарегистрирован!", code: 2}))
+                }
+    
+                if(!validate.validate(password)) {
+                    return next(ApiError.badRequest(validate.validate(password, {list: true})))
+                }
+    
+                
+               const activationLink = await uuid.v4();
+               const hashPassword = await bcrypt.hash(password, 5)
+               await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`);
+    
+               
+               const user = await User.create({
+                email,
+                role,
+                password: hashPassword,
+                activationLink
+               })
+    
+               const basket = await Basket.create({userId: user.id})
+               const jwtToken = generateJwt(user.id, email, role, user.activationLink)
+               
+                return res.json([jwtToken, {code:1, registration: 'Пользователь зарегистрирован!'}]);
+            } catch(e) {
+                console.log(e);
             }
-
-
-            const check = await User.findOne({where: {email}});
-
-            if(check) {
-             return next(ApiError.badRequest("Пользователь с таким email уже зарегистрирован!"))
-            }
-
-            if(!validate.validate(password)) {
-                return next(ApiError.badRequest(validate.validate(password, {list: true})))
-            }
-
-            
-           const activationLink = await uuid.v4();
-           const hashPassword = await bcrypt.hash(password, 5)
-           await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`);
-
            
-           const user = await User.create({
-            email,
-            role,
-            password: hashPassword,
-            activationLink
-           })
-
-           const basket = await Basket.create({userId: user.id})
-           const jwtToken = generateJwt(user.id, email, role, user.activationLink)
-
-            return res.json([jwtToken, {code:1, registration: 'Done'}]);
 
     }
 
@@ -69,11 +73,18 @@ class UserController {
     async reset(req, res, next) {
         try {
             const {email} = req.body
+
             const user = await User.findOne({where: {email}})
+            const resetLink = await uuid.v4();
+
             if(!user) {
                 return next(ApiError.internal(`Пользователь с email  ${email} не зарегистрирован!`))
             }
-            await mailService.sendResetPassword(email, `${process.env.API_URL}/api/user/newpass`);
+            await user.set({
+                resetLink: resetLink,
+            })
+            await mailService.sendResetPassword(email, `${process.env.API_URL}/api/user/newpass/${resetLink}`);
+            await user.save();
             return res.json({newpass: 'Done'})
 
         } catch(e) {
@@ -115,14 +126,16 @@ class UserController {
         }
 
         const token = generateJwt(user.id, user.email, user.role, user.activationLink)
+        console.log(jwt.verify(token, process.env.SECRET_KEY))
+        await res.set('Authorization' , `Bearer ${token}`);
         return res.json({token})
     }
+
+    
     async check(req, res, next) {
-        const {id} = req.query // Могу получить параметры строки запроса
-        if(!id) {
-           return next(ApiError.badRequest('Не заполнен идентификатор'))
-        }
-        res.json(id)
+        const token = generateJwt(req.user.id, req.user.email, req.user.role)
+        await res.set('Authorization' , `Bearer ${token}`);
+        return res.json({token})
     }
 }
 

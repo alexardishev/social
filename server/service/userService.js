@@ -22,6 +22,13 @@ class UserService {
           });
         await user.save();
     }
+
+    async resetPassword(resetLink) {
+        const user = await User.findOne({where:{resetLink: resetLink}})
+        if (!user) {
+            throw ApiError.badRequest('Неккоректная ссылка сброса пароля')
+        }
+    }
 }
 
 module.exports = new UserService();

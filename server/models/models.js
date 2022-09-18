@@ -11,6 +11,7 @@ const User = sequelize.define("user", {
     role: {type:DataTypes.STRING, defaultValue: "USER"},
     isActivate: {type: DataTypes.BOOLEAN, defaultValue: false},
     activationLink: {type: DataTypes.STRING},
+    resetLink: {type: DataTypes.STRING},
     attempts: {type: DataTypes.INTEGER, defaultValue: 0},
     maxAttempts: {type: DataTypes.INTEGER, defaultValue: attemp}
 })
