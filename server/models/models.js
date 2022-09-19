@@ -13,7 +13,8 @@ const User = sequelize.define("user", {
     activationLink: {type: DataTypes.STRING},
     resetLink: {type: DataTypes.STRING},
     attempts: {type: DataTypes.INTEGER, defaultValue: 0},
-    maxAttempts: {type: DataTypes.INTEGER, defaultValue: attemp}
+    maxAttempts: {type: DataTypes.INTEGER, defaultValue: attemp},
+    isOnline: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
 
 

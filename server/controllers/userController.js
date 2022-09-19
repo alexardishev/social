@@ -126,7 +126,6 @@ class UserController {
         }
 
         const token = generateJwt(user.id, user.email, user.role, user.activationLink)
-        console.log(jwt.verify(token, process.env.SECRET_KEY))
         await res.set('Authorization' , `Bearer ${token}`);
         return res.json({token})
     }

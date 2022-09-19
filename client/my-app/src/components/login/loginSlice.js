@@ -6,7 +6,8 @@ const loginAdapter = createEntityAdapter();
 const initialState = loginAdapter.getInitialState({
     status: 'not authorized',
     msg: '',
-    token: false
+    token: false,
+    path: ''
 });
 
 
@@ -28,6 +29,9 @@ const loginSlice = createSlice({
         },
         exitUser: (state, action) => {
             state.token = false
+        },
+        setPath: (state, action) => {
+            state.path = action.payload;
         }
 
     }
@@ -42,5 +46,6 @@ export const {
     loginUser,
     doubleUser,
     registersUser,
-    exitUser
+    exitUser, 
+    setPath
 } = actions;

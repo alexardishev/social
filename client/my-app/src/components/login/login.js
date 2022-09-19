@@ -10,7 +10,7 @@ import Input from '../input/input';
 import Button from '../button/Button';
 import Spinner from '../spinner/Spinner';
 import Notification from '../notification/Notification';
-import {Link, Redirect} from 'react-router-dom'
+import {Link, Redirect, useHistory} from 'react-router-dom'
 
 const Login = () => {
 
@@ -21,10 +21,9 @@ const Login = () => {
     const [emailError, setEmailError] = useState("Email не может быть пустым");
     const [passwordError, setPasswordError] = useState("Пароль не может быть пустым");
     const [formValid, setFormValid]= useState(false);
+    let history = useHistory();
 
 
-
-    // const history = useHistory();
     const dispatch = useDispatch();
     const {request} = useHttp();
     const authStatus  = useSelector(state => state.login.status)
@@ -127,6 +126,7 @@ const Login = () => {
     const checkToken = () => {
         if(token) {
            console.log(token)
+        //    history.push('/main');
            return <Redirect push to="/main"/>
         }
 
