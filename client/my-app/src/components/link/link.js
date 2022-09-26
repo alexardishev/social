@@ -4,7 +4,7 @@ import './link.scss'
 
 const LinkBar = (props) => {
     return(
-    <Link className='linkBar' onClick={props.click} to={`/${props.path}`}>
+    <Link className= {`linkBar ${props.classNameSecond}`} onClick={props.click} to={`/${props.path}`}>
         {props.nameLink}
     </Link>
     )

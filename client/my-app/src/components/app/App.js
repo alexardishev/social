@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Switch, useLocation} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 import { useEffect, useState} from 'react';
 import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,52 +19,59 @@ function App() {
   const dispatch = useDispatch();
   const {request} = useHttp();
   const token = Cookies.get("token")
-  const stateTokenStatus = useSelector(state => state.token)
+  const email = Cookies.get("email")
+  const stateTokenStatus = useSelector(state => state.login.token)
   const path = useSelector(state => state.login.path)
   const [f5, setf5] = useState(false);
 console.log(path);
   const socket = io("http://localhost:5000");
 
   socket.on("connect", () => {
-    console.log(socket.id); 
-    socket.emit('userAuth', token ?jwt_decode(token): null)
+    socket.emit('userAuth', token && stateTokenStatus ?jwt_decode(token): null)
     
-    
-    // x8WIv7-mJelg7on_ALbx
   });
+  
+  console.log(email)
 
-  socket.on('hello', (arg)=> {
-      console.log(arg)
-  })
-
-
-  const offlineUser = () => {
-    socket.emit('disconnectUser', 'reload')
+  const redirectToAuth = () => {
+    if(!token) {
+      return <Redirect push to="/"/>
+    } 
+    
   }
+
+
   const checkAuth = async () => {
-    request(`http://localhost:5000/api/user/auth`, "GET", null, {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`})
+    request(`http://localhost:5000/api/user/auth`, "GET", null, {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'useremail' : `${email}`})
     .then(res => {
       if(res.token) {
         dispatch(loginUser(true))
+
   
+      } else {
+        dispatch(loginUser(false))
       }
 
     })
-    .catch(dispatch(loginUser(false)))
+    .catch(()=> {
+      dispatch(loginUser(false))
+    })
 
   }
 
   if(path === "/main" && !f5){
       setf5(!f5);
   }
+  
 
   useEffect(()=> {
-      offlineUser();
+    redirectToAuth();
       checkAuth();
   },[])
-
+  
   return (
     <Router>
+      {redirectToAuth()}
       <main className="app">
         <div className="content">
           <Switch>

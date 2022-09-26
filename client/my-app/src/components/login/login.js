@@ -94,6 +94,8 @@ const Login = () => {
                     console.log(res.token)
                     // document.cookie = `token=${res.token}`
                     Cookies.set("token", res.token)
+                    Cookies.set("email", userLogin.email)
+
                     console.log(document.cookie)
                     dispatch(loginUser(true))
                 } else {

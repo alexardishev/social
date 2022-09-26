@@ -1,5 +1,14 @@
 .wrapper_container {
+    
     display: block;
     height: 800px;
     background-color: #000000;
+}
+
+.wrapper_containerWhite {
+    position: relative;
+    display: block;
+    height: 800px;
+    background-color: #fff;
+    overflow-x: hidden;
 }

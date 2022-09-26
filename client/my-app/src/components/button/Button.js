@@ -1,4 +1,4 @@
-const Button = (props) => {
+const Button1 = (props) => {
 
     return(
         <button disabled={props.disabled} onClick={props.click} type={props.type} className={props.className}>{props.name}</button>
@@ -8,4 +8,4 @@ const Button = (props) => {
 }
 
 
-export default Button
+export default Button1

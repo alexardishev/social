@@ -1,5 +1,99 @@
-const Menu = () => {
-    
+import { useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+
+
+import LinkBar from '../link/link'
+import './menu.scss'
+import icon_friend from "./friends.png"
+import msg from './personalMsg.png'
+import random from './random.png'
+import map from './map.png'
+import favorite from './favorite.png'
+import support from './support.png'
+import Logos from "../logo/logo";
+
+
+const MenuTop = (props) => {
+
+    const [activeMenu, setActiveMenu] = useState(false);
+    // const [className, setClassName] = useState('noActiveMenu');
+    const myRef = useRef();
+
+    const activate = async () => {
+        console.log('qqqq')
+        setActiveMenu(!activeMenu);
+        // activeMenu ? setClassName('activeMenu') : setClassName('noActiveMenu');
+
+    }
+
+    const checkRef = (e) => {
+        if(e.target == myRef.current && className=== 'activeMenu') {
+            console.log('111')
+            className = 'noActiveMenu'
+            setActiveMenu(false)
+            console.log(className)
+        }
+    }
+
+    let className = activeMenu ? 'activeMenu' :'noActiveMenu';
+    return (
+        <>
+    <div onClick={checkRef} ref={myRef} className={activeMenu ? 'wrapActiveMenu' : 'wrap'}>
+      
+      </div>
+
+
+    <div onClick={activate} className={className === 'activeMenu' ? 'noHumburger' : 'humburger'}>
+        <svg width="40" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 18V20H5V18H16ZM21 11V13H3V11H21ZM19 4V6H8V4H19Z" fill="#222222"/>
+        </svg>
+    </div >
+
+       <div className={className}>
+            <div className='menuElement'>
+                    <div className='activeMenu_container'>
+                    <img className='activeMenu_icon'  src={icon_friend} alt="friends" />
+                    <LinkBar 
+                    classNameSecond='activeMenu_link'
+                    nameLink='Друзья'/>
+                </div>
+                <div className='activeMenu_container'>
+                    <img className='activeMenu_icon'  src={msg} alt="personal msg" />
+                    <LinkBar 
+                    classNameSecond='activeMenu_link'
+                    nameLink='Личные сообщения'/>
+                </div>
+                <div className='activeMenu_container'>
+                    <img className='activeMenu_icon'  src={random} alt="personal msg" />
+                    <LinkBar 
+                    classNameSecond='activeMenu_link'
+                    nameLink='Случайный чат'/>
+                </div>
+                <div className='activeMenu_container'>
+                    <img className='activeMenu_icon'  src={map} alt="personal msg" />
+                    <LinkBar 
+                    classNameSecond='activeMenu_link'
+                    nameLink='Карта'/>
+                </div>
+                <div className='activeMenu_container'>
+                    <img className='activeMenu_icon'  src={favorite} alt="favorite" />
+                    <LinkBar 
+                    classNameSecond='activeMenu_link'
+                    nameLink='Избранное'/>
+                </div>
+                <div className='activeMenu_container'>
+                    <img className='activeMenu_icon'  src={support} alt="favorite" />
+                    <LinkBar 
+                    classNameSecond='activeMenu_link'
+                    nameLink='Поддержка'/>
+                </div>
+                <Logos/>
+            </div>
+    </div>
+        
+        </>
+     
+    )
 }
 
-export default Menu
+export default MenuTop
