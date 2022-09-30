@@ -3,7 +3,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 5;
+    // z-index: 5;
 }
 
 .wrapActiveMenu {
@@ -16,11 +16,11 @@
     opacity: 0.25;
 }
 .activeMenu{
-    position: absolute;
+    position: fixed;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    width: 15%;
+    width: 30%;
     height: 100%;
     background-color: #000000;
     align-items: center;
@@ -32,6 +32,53 @@
         display: flex;
         align-items:center
     }
+    & ul {
+        position: relative;
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        & li {
+            margin: 15px 0;
+            & a {
+                color: none;
+                text-decoration: none;
+                font-size: 20px;
+                font-weight: 500;
+                padding: 5px 30px;
+                color: #fff;
+                border-radius: 50px;
+                background: #000;
+                position: relative;
+                line-height: 20px;
+                transition: all 0.3s ease;
+                &:after {
+					position: absolute;
+					content: "";
+					background: #fff;
+					background: linear-gradient(#14ffe9, #ffeb3b, #ff00e0);
+					width: 104%;
+					height: 110%;
+					left: -2%;
+					top: -5%;
+					border-radius: 50px;
+					transform: scaleY(0);
+					z-index: -1;
+					animation: rotate 1.5s linear infinite;
+					transition: transform 0.3s ease;
+				}
+				&:hover {
+					color: #fff;
+					&:after {
+						transform: scaleY(1);
+					}
+                }
+            }
+        }
+    
+    }
+
     &_icon {
         width: 15px;
 
@@ -39,6 +86,9 @@
     &_link {
         margin-left: 7px;
         font-size: 15px;
+        font-weight: 200;
+        letter-spacing: normal; 
+
     }
 }
 
@@ -55,6 +105,28 @@
     justify-content: start;
     z-index: 9999;
     transition: all 0.5s;
+    & ul {
+        position: relative;
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    & li {
+        margin: 15px 0;
+        & a {
+            color: none;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 500;
+            padding: 5px 30px;
+            color: #fff;
+            border-radius: 50px;
+            background: #000;
+            position: relative;
+            line-height: 20px;
+            transition: all 0.3s ease;}
+        }
 }
 
 .noHumburger {
@@ -72,8 +144,9 @@
 }
 
 .menuElement {
-    height: 75%;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: start;
 }

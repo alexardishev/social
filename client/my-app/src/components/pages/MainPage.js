@@ -1,12 +1,11 @@
-import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, Link } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import {setPath} from '../login/loginSlice'
 import ContainerWhite from "../container/ContainerWhite";
 import Wrapper1200 from "../wrapper/wrapper1200";
 import Button from "../button/Button";
 import Man from './man.jpg'
-import './MainPage.scss'
-import MenuTop from "../menu/menu";
+import './pages.scss'
 
 const MainPage = () => {
     const dispatch = useDispatch();
@@ -16,21 +15,25 @@ const MainPage = () => {
         dispatch(setPath(location.pathname));
     }
 
+
     return(
         <>
         <ContainerWhite>
             
-            <MenuTop/>
+            {/* <MenuTop/> */}
             <Wrapper1200>
             <div className='wrapperContent'>
                 <h1>Добро пожаловать Ардышев Александр!</h1>
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo asperiores, libero blanditiis non soluta natus. Beatae molestiae omnis ex odio. Quod amet commodi velit, facere dolores vero fugit sit dolor!
                 </p>
-            <Button
-                className="glow-on-hover"
-                name= "Заполнить анкету"
-                />
+                <Link to="/form">
+                    <Button
+                    className="glow-on-hover"
+                    name= "Моя анкета"
+                    />
+                </Link>
+
             </div>
 
             <div className='wrapperContent'>

@@ -50,45 +50,19 @@ const MenuTop = (props) => {
     </div >
 
        <div className={className}>
-            <div className='menuElement'>
-                    <div className='activeMenu_container'>
-                    <img className='activeMenu_icon'  src={icon_friend} alt="friends" />
-                    <LinkBar 
-                    classNameSecond='activeMenu_link'
-                    nameLink='Друзья'/>
-                </div>
-                <div className='activeMenu_container'>
-                    <img className='activeMenu_icon'  src={msg} alt="personal msg" />
-                    <LinkBar 
-                    classNameSecond='activeMenu_link'
-                    nameLink='Личные сообщения'/>
-                </div>
-                <div className='activeMenu_container'>
-                    <img className='activeMenu_icon'  src={random} alt="personal msg" />
-                    <LinkBar 
-                    classNameSecond='activeMenu_link'
-                    nameLink='Случайный чат'/>
-                </div>
-                <div className='activeMenu_container'>
-                    <img className='activeMenu_icon'  src={map} alt="personal msg" />
-                    <LinkBar 
-                    classNameSecond='activeMenu_link'
-                    nameLink='Карта'/>
-                </div>
-                <div className='activeMenu_container'>
-                    <img className='activeMenu_icon'  src={favorite} alt="favorite" />
-                    <LinkBar 
-                    classNameSecond='activeMenu_link'
-                    nameLink='Избранное'/>
-                </div>
-                <div className='activeMenu_container'>
-                    <img className='activeMenu_icon'  src={support} alt="favorite" />
-                    <LinkBar 
-                    classNameSecond='activeMenu_link'
-                    nameLink='Поддержка'/>
-                </div>
-                <Logos/>
-            </div>
+        <div>
+                            <ul>
+                                <li><a href="#">Друзья</a></li>
+                                <li><a href="#">Личные сообщения</a></li>
+                                <li><a href="#">Случайный чат</a></li>
+                                <li><a href="#">Избранное</a></li>
+                            </ul>
+        </div>
+                         
+                            
+                            <div>
+                                <Logos/>
+                            </div>
     </div>
         
         </>

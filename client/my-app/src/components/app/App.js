@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch, Redirect, useLocation} from 'react-router-dom'
 import { useEffect, useState} from 'react';
 import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,11 +7,14 @@ import {useHttp} from '../../hooks/https.hook';
 import { io } from "socket.io-client";
 import jwt_decode from 'jwt-decode'
 
+import MenuTop from '../menu/menu';
 import HelloPage from '../pages/HelloPage';
 import RegPage from '../pages/RegPage';
 import LoginPage from '../pages/LoginPage';
 import MainPage from '../pages/MainPage';
 import MessagePage from '../pages/MessagePage';
+import FormYourself from '../pages/FormYourself';
+
 
 import './app.scss';
 
@@ -23,7 +26,7 @@ function App() {
   const stateTokenStatus = useSelector(state => state.login.token)
   const path = useSelector(state => state.login.path)
   const [f5, setf5] = useState(false);
-console.log(path);
+  
   const socket = io("http://localhost:5000");
 
   socket.on("connect", () => {
@@ -68,12 +71,13 @@ console.log(path);
     redirectToAuth();
       checkAuth();
   },[])
-  
+  console.log(path)
   return (
     <Router>
       {redirectToAuth()}
       <main className="app">
         <div className="content">
+          {path && path !== '' ?<MenuTop/>: null}
           <Switch>
               <Route exact path="/">
                   <HelloPage/>
@@ -89,6 +93,9 @@ console.log(path);
               </Route>
               <Route exact path="/message">
                   <MessagePage/>
+              </Route>
+              <Route exact path="/form">
+                  <FormYourself/>
               </Route>
           </Switch>
         </div>
