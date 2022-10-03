@@ -3,7 +3,8 @@ const attemp = process.env.ATTEMP;
 
 async function up (queryInterface, {DataTypes}) {
     await queryInterface.addColumn('users', 
-        "isOnline",  {type: DataTypes.BOOLEAN, defaultValue: false}
+        "isFullData",  {type:DataTypes.BOOLEAN, defaultValue: false},
+        
     )
 }
 
@@ -15,3 +16,8 @@ module.exports = {
     up,
     down
 }
+
+// firstName: {type:DataTypes.STRING, defaultValue: null},
+// lastName: {type:DataTypes.STRING, defaultValue: null},
+// middleName: {type:DataTypes.STRING, defaultValue: null},
+// sex: {type:DataTypes.STRING, defaultValue: null},

@@ -34,7 +34,6 @@ function App() {
     
   });
   
-  console.log(email)
 
   const redirectToAuth = () => {
     if(!token) {
@@ -71,13 +70,13 @@ function App() {
     redirectToAuth();
       checkAuth();
   },[])
-  console.log(path)
+  
   return (
     <Router>
       {redirectToAuth()}
       <main className="app">
         <div className="content">
-          {path && path !== '' ?<MenuTop/>: null}
+          {token && path && path !== '' ?<MenuTop/>: null}
           <Switch>
               <Route exact path="/">
                   <HelloPage/>

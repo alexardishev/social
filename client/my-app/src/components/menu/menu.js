@@ -1,15 +1,7 @@
 import { useState, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 
 
-import LinkBar from '../link/link'
 import './menu.scss'
-import icon_friend from "./friends.png"
-import msg from './personalMsg.png'
-import random from './random.png'
-import map from './map.png'
-import favorite from './favorite.png'
-import support from './support.png'
 import Logos from "../logo/logo";
 
 
@@ -53,6 +45,7 @@ const MenuTop = (props) => {
         <div>
                             <ul>
                                 <li><a href="#">Друзья</a></li>
+                                <li><a href="#">Профиль</a></li>
                                 <li><a href="#">Личные сообщения</a></li>
                                 <li><a href="#">Случайный чат</a></li>
                                 <li><a href="#">Избранное</a></li>

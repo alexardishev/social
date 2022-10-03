@@ -6,7 +6,6 @@ import { io } from "socket.io-client";
 import Cookies from 'js-cookie'
 import {exitUser} from '../login/loginSlice'
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState} from 'react';
 
 const HelloPage = (props) => {
     const token2 = useSelector(state => state.login.token)
@@ -21,7 +20,6 @@ const HelloPage = (props) => {
         socket.emit('forceDisconnect', email);
         Cookies.remove("token")
         dispatch(exitUser())
-        // window.location.reload();
 
       }
 

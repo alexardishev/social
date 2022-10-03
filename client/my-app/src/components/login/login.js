@@ -79,7 +79,7 @@ const Login = () => {
 
 
     const creatingUser = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
 
         const userLogin = {
             email: email,

@@ -14,7 +14,12 @@ const User = sequelize.define("user", {
     resetLink: {type: DataTypes.STRING},
     attempts: {type: DataTypes.INTEGER, defaultValue: 0},
     maxAttempts: {type: DataTypes.INTEGER, defaultValue: attemp},
-    isOnline: {type: DataTypes.BOOLEAN, defaultValue: false}
+    isOnline: {type: DataTypes.BOOLEAN, defaultValue: false},
+    firstName: {type:DataTypes.STRING, defaultValue: null},
+    lastName: {type:DataTypes.STRING, defaultValue: null},
+    middleName: {type:DataTypes.STRING, defaultValue: null},
+    sex: {type:DataTypes.STRING, defaultValue: null},
+    isFullData: {type: DataTypes.BOOLEAN, defaultValue: false},
 })
 
 
