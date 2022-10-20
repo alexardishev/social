@@ -7,9 +7,9 @@ const mailService = require('../service/mailService');
 const validate = require('../validation/validation')
 const userService = require('../service/userService')
 
-const generateJwt = (id, email, role, activationLink) => {
+const generateJwt = (id, email, role, activationLink,isFullData) => {
     return jwt.sign(
-        {id, email, role, activationLink},
+        {id, email, role, activationLink,isFullData},
         process.env.SECRET_KEY,
         {expiresIn: '24h'}
     )
@@ -106,6 +106,8 @@ class UserController {
 
 
         const user = await User.findOne({where: {email}})
+
+        console.log(user)
         if(!user) {
             return next(ApiError.internal(`Пользователь с email  ${email} не зарегистрирован!`))
         }
@@ -124,15 +126,26 @@ class UserController {
         if(!user.isActivate) {
             return next(ApiError.internal(`Необходимо активировать учетную запись`))
         }
-
-        const token = generateJwt(user.id, user.email, user.role, user.activationLink)
+        console.log(user.isFullData)
+        const token = generateJwt(user.id, user.email, user.role, user.activationLink, user.isFullData)
         await res.set('Authorization' , `Bearer ${token}`);
         return res.json({token})
     }
 
+    async getOne(req, res, next) {
+        const {email} = req.params
+        const user = await User.findOne({
+            where: {email}
+        })
+        if(!user){
+            const noUser = {error: 'not User in DB'}
+            return res.json(noUser)
+        }
+        return res.json(user);
+    }
     
     async check(req, res, next) {
-        const token = generateJwt(req.user.id, req.user.email, req.user.role)
+        const token = generateJwt(req.user.id, req.user.email, req.user.role, req.user.activationLink, req.user.isFullData)
         await res.set('Authorization' , `Bearer ${token}`);
         return res.json({token})
     }

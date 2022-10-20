@@ -25,12 +25,14 @@ app.use('/api', router);
 app.use(errorHandler) // Обработка ошибок должен быть последним
 
 
+
 io.on("connection", (socket) => {
     console.log('connect')
     socket.on('userAuth', (arg)=> {
         console.log('СОКЕТ ОТКРЫТ')
             userOnlineStatus(arg?.email)
 
+            console.log(io.engine.clientsCount)
     socket.on("disconnect", (reason) => {
             userOfflineStatus(arg?.email)
         });

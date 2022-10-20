@@ -33,8 +33,6 @@ function App() {
     socket.emit('userAuth', token && stateTokenStatus ?jwt_decode(token): null)
     
   });
-  
-
   const redirectToAuth = () => {
     if(!token) {
       return <Redirect push to="/"/>

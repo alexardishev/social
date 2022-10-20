@@ -11,6 +11,7 @@ const Input = (props) => {
             placeholder={props.placeholder}
             value={props.value}
             onChange={props.change}
+            readOnly={props.readOnly}
             />
             
         <label htmlFor={props.htmlFor} className={props.labelClassName}>{props.label}</label>

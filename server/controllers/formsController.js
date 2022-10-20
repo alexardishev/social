@@ -31,11 +31,12 @@ class FormsControllers {
            
 
            
-            return res.json([{code:1, update: 'Анкета заполнена'}]);
+            return res.json({code:1, update: 'Анкета заполнена', isFullData: user.isFullData});
         } catch(e) {
             console.log(e);
         }
     }
+
 }
 
 module.exports = new FormsControllers
