@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import {setPath} from '../login/loginSlice'
-import { sendStatus,setStatusData } from './personalDateSlice';
+import { sendStatus,setStatusData,  getPerson} from './personalDateSlice';
 import {useHttp} from '../../hooks/https.hook';
 import Cookies from 'js-cookie'
 import jwt_decode from 'jwt-decode'
@@ -21,9 +21,10 @@ const SetPersonalDate = () => {
     let location = useLocation();
     const dispatch = useDispatch();
     const status = useSelector(state => state.personalDate.status)
+    const person = useSelector(state => state.personalDate.person)
     const token = Cookies.get("token")
     const decodeToken = jwt_decode(token)
-    const fullData = decodeToken.isFullData;
+    let fullData = useSelector(state => state.personalDate.fullData);
     console.log(fullData);
 
     const [firstName, setFirstName] = useState("");
@@ -32,14 +33,22 @@ const SetPersonalDate = () => {
     const [sex, setSex] = useState("");
     const email = Cookies.get('email')
 
-
     const setPathOnLoad =()=> {
             dispatch(setPath(location.pathname));
     }
 
     
     const getFullData = async (e) => {
-        
+        request(`http://localhost:5000/api/user/${email}`).
+        then( res => {
+            dispatch(getPerson(res))
+            dispatch(setStatusData(res.isFullData))
+            setFirstName(res.firstName)
+            setMiddleName(res.middleName)
+            setLastName(res.lastName)
+            setSex(res.sex)
+
+        })
     }
 
     const setFullData  = async (e) => {
@@ -57,22 +66,24 @@ const SetPersonalDate = () => {
 
         request(`http://localhost:5000/api/forms/upadatePersonal`, 'POST', JSON.stringify(data), {'Content-Type': 'application/json'}, true).
         then(res => {
-
+                console.log(res)
                 dispatch(sendStatus('not'))
-                dispatch(setStatusData(res.isFullData))
+                getFullData();
                 setFirstName('');
                 setMiddleName('');
                 setLastName('');
                 setSex('');                
 
         })
+
     }
 
 
     useEffect(()=> {
         setPathOnLoad();
+        getFullData();
     },[])
-
+    // fullData = person.isFullData
     const content = status === 'loading'? <Spinner/> : <Form 
     classNameWrapper='wrapper'
     submit={setFullData}
@@ -130,6 +141,8 @@ const SetPersonalDate = () => {
                         <Input
                         // onBlur={e=> blurHandler(e)}
                         wrapperClassName="wrapperRadio"
+                        disabled={fullData}
+                        checked={sex === 'male' ? true : false}
                         type="radio" 
                         name="sex" 
                         className="inputRadio"
@@ -145,6 +158,7 @@ const SetPersonalDate = () => {
                         <Input
                         // onBlur={e=> blurHandler(e)}
                         wrapperClassName="wrapperRadio"
+                        disabled={fullData}
                         type="radio" 
                         name="sex" 
                         className="inputRadio"

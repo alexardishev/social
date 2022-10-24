@@ -5,7 +5,8 @@ const loginAdapter = createEntityAdapter();
 
 const initialState = loginAdapter.getInitialState({
     status: 'not',
-    fullData: null
+    fullData: null,
+    person: null
 });
 
 
@@ -13,6 +14,9 @@ const personalDateSlice = createSlice({
     name: 'personalDate',
     initialState,
     reducers: {
+        getPerson: (state, action) => {
+            state.person = action.payload
+        },
         sendStatus: (state, action ) => {
             state.status = action.payload
         },
@@ -30,5 +34,6 @@ export default reducer
 
 export const {
     sendStatus,
-    setStatusData
+    setStatusData,
+    getPerson
 } = actions;

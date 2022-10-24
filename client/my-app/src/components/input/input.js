@@ -12,6 +12,8 @@ const Input = (props) => {
             value={props.value}
             onChange={props.change}
             readOnly={props.readOnly}
+            disabled={props.disabled}
+            checked={props.checked}
             />
             
         <label htmlFor={props.htmlFor} className={props.labelClassName}>{props.label}</label>

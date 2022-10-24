@@ -11,6 +11,7 @@ const HelloPage = (props) => {
     const token2 = useSelector(state => state.login.token)
     const dispatch = useDispatch();
     const email = Cookies.get("email")
+    const token = Cookies.get("token")
 
     const socket = io("http://localhost:5000");
 
@@ -20,19 +21,20 @@ const HelloPage = (props) => {
         socket.emit('forceDisconnect', email);
         Cookies.remove("token")
         dispatch(exitUser())
+        window.location.reload();
 
       }
 
 
 
-    console.log(token2);
+    console.log(token);
     return(
         <Container>
             <div className="wrapper">
                 <Logos/>
                 <Navbar>
 
-{ token2 ?  
+{ token ?  
 
              <>
              <LinkBar
