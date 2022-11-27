@@ -14,7 +14,7 @@ import LoginPage from '../pages/LoginPage';
 import MainPage from '../pages/MainPage';
 import MessagePage from '../pages/MessagePage';
 import FormYourself from '../pages/FormYourself';
-
+import FriendLists from '../pages/FriendLists';
 
 import './app.scss';
 
@@ -74,7 +74,7 @@ function App() {
       {redirectToAuth()}
       <main className="app">
         <div className="content">
-          {token && path && path !== '' ?<MenuTop/>: null}
+          {token && path && path !== '' ? <MenuTop/>: null}
           <Switch>
               <Route exact path="/">
                   <HelloPage/>
@@ -93,6 +93,9 @@ function App() {
               </Route>
               <Route exact path="/form">
                   <FormYourself/>
+              </Route>
+              <Route exact path="/friendLists">
+                  <FriendLists/>
               </Route>
           </Switch>
         </div>

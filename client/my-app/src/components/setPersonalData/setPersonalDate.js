@@ -26,7 +26,7 @@ const SetPersonalDate = () => {
     const decodeToken = jwt_decode(token)
     let fullData = useSelector(state => state.personalDate.fullData);
     console.log(fullData);
-
+console.log(decodeToken);
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");

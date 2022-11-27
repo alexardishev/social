@@ -29,6 +29,19 @@ class FormsControllers {
 
            await user.save();
            
+        //    User.find( {
+        //     where: {
+        //         id: {
+        //             $notIn: sequelize.literal( 
+        //                 '( SELECT friend_id ' +
+        //                 'FROM friends_lists ' +
+        //                'WHERE userId = ' + req.user_id +
+        //                 ' AND isAproove = ' + true +
+        //             ')'
+        //             )
+        //         }
+        //     } 
+        // } );
 
            
             return res.json({code:1, update: 'Анкета заполнена', isFullData: user.isFullData});

@@ -2,6 +2,9 @@ import { configureStore } from "@reduxjs/toolkit"
 import auth from "../components/auth/authSlice"
 import login from "../components/login/loginSlice"
 import personalDate from '../components/setPersonalData/personalDateSlice'
+import frineds from '../components/friends/friendsListsSlice'
+
+
 
 const stringMiddleware = (store) => (dispatch) => (action) => {
     if(typeof action === 'string') {
@@ -28,7 +31,7 @@ const enhanser = (createStore) => (...args) => {
 }
 
 const store = configureStore({
-    reducer : {auth, login, personalDate},
+    reducer : {auth, login, personalDate, frineds},
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
 })

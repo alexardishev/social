@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-
+import LinkBar from '../link/link';
 
 import './menu.scss'
 import Logos from "../logo/logo";
@@ -44,8 +44,14 @@ const MenuTop = (props) => {
        <div className={className}>
         <div>
                             <ul>
-                                <li><a href="#">Друзья</a></li>
-                                <li><a href="#">Профиль</a></li>
+                                <li><a href="/friendLists">Друзья</a></li>
+                                <li><LinkBar
+                                    path='form'
+                                    nameLink='Анкета'
+                                    classNameSecond= 'marginNone'
+                                />
+                                 </li>
+
                                 <li><a href="#">Личные сообщения</a></li>
                                 <li><a href="#">Случайный чат</a></li>
                                 <li><a href="#">Избранное</a></li>

@@ -65,11 +65,21 @@ const TypeBrand = sequelize.define('type_brand', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
+const FriendsList = sequelize.define('friends_list', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    friend_id: {type: DataTypes.INTEGER},
+    isAproove: {type: DataTypes.BOOLEAN, defaultValue: false}
+})
+
 User.hasOne(Basket)
 Basket.belongsTo(User)
 
 User.hasMany(Rating)
 Rating.belongsTo(User)
+
+User.hasMany(FriendsList)
+FriendsList.belongsTo(User)
+
 
 Basket.hasMany(BasketDevice)
 BasketDevice.belongsTo(Basket)

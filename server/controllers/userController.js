@@ -2,6 +2,8 @@ const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const {User, Basket} = require('../models/models')
+const sequelize = require('../db')
+const { Op } = require("sequelize");
 const jwt = require('jsonwebtoken');
 const mailService = require('../service/mailService');
 const validate = require('../validation/validation')
@@ -15,6 +17,7 @@ const generateJwt = (id, email, role, activationLink,isFullData) => {
     )
 }
 
+console.log(Op)
 
 
 class UserController {
@@ -148,6 +151,32 @@ class UserController {
         const token = generateJwt(req.user.id, req.user.email, req.user.role, req.user.activationLink, req.user.isFullData)
         await res.set('Authorization' , `Bearer ${token}`);
         return res.json({token})
+    }
+    // Отдает лист друзей, которых у меня нету в друзьях. И которых я могу добавить.
+    async getFriendListToAdd(req, res, next) {
+            const {id} = req.params
+          
+            const users = await User.findAll({
+                attributes: ['firstName', 'lastName', 'middleName', 'sex'],
+                    where: {
+                        isActivate: true,
+                        isFullData: true,
+                        id: {
+                            [Op.notIn]: sequelize.literal( `(SELECT "friend_id" 
+                                FROM public.friends_lists fr
+                                    WHERE fr."userId" = ${id}
+                                AND fr."isAproove" = ${true})`)
+                        }
+                    }
+            });
+    
+            if(!users) {
+                return next(ApiError.internal(`Нет друзей`))
+            }
+    
+            return res.json(users)
+        
+        
     }
 }
 

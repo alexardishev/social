@@ -2,8 +2,8 @@ const attemp = process.env.ATTEMP;
 
 
 async function up (queryInterface, {DataTypes}) {
-    await queryInterface.addColumn('users', 
-        "isFullData",  {type:DataTypes.BOOLEAN, defaultValue: false},
+    await queryInterface.addColumn('friends_lists', 
+        "isAproove",  {type:DataTypes.BOOLEAN, defaultValue: false},
         
     )
 }

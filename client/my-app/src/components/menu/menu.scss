@@ -15,6 +15,10 @@
     
     opacity: 0.25;
 }
+
+.marginNone {
+    margin-left: 0px;
+}
 .activeMenu{
     position: fixed;
     padding: 20px;
@@ -53,6 +57,7 @@
                 position: relative;
                 line-height: 20px;
                 transition: all 0.3s ease;
+                margin-left: none !important;
                 &:after {
 					position: absolute;
 					content: "";
