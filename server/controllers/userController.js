@@ -178,6 +178,32 @@ class UserController {
         
         
     }
+
+    async getFriendList(req, res, next) {
+        const {id} = req.params
+      
+        const users = await User.findAll({
+            attributes: ['firstName', 'lastName', 'middleName', 'sex'],
+                where: {
+                    isActivate: true,
+                    isFullData: true,
+                    id: {
+                        [Op.in]: sequelize.literal( `(SELECT "friend_id" 
+                            FROM public.friends_lists fr
+                                WHERE fr."userId" = ${id}
+                            AND fr."isAproove" = ${true})`)
+                    }
+                }
+        });
+
+        if(!users) {
+            return next(ApiError.internal(`Нет друзей`))
+        }
+
+        return res.json(users)
+    
+    
+}
 }
 
 

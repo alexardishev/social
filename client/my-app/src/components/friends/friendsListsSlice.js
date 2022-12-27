@@ -5,7 +5,8 @@ const friendsApadter = createEntityAdapter();
 
 
 const initialState = friendsApadter.getInitialState({
-    friendList: []
+    friendList: [],
+    friendListAproove: [],
 });
 
 
@@ -16,6 +17,9 @@ const friendsListsSlice = createSlice(
         reducers: {
             loadFriends: (state, action)=> {
                 state.friendList = action.payload;
+            },
+            loadFriendsAproove: (state, action) => {
+                state.friendListAproove = action.payload;
             }
         }
 
@@ -26,5 +30,6 @@ const {actions, reducer} = friendsListsSlice;
 export default reducer
 
 export const {
-    loadFriends
+    loadFriends,
+    loadFriendsAproove,
 } = actions;

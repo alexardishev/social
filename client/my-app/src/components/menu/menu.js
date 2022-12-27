@@ -44,7 +44,13 @@ const MenuTop = (props) => {
        <div className={className}>
         <div>
                             <ul>
-                                <li><a href="/friendLists">Друзья</a></li>
+                                <li>
+                                <LinkBar
+                                    path='friendLists'
+                                    nameLink='Друзья'
+                                    classNameSecond= 'marginNone'
+                                />
+                                </li>
                                 <li><LinkBar
                                     path='form'
                                     nameLink='Анкета'

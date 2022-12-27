@@ -13,16 +13,21 @@ const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http, {cors: {origin:"*"}})
 const event = require('./events/event')(io)
-
 const PORT = process.env.PORT || 5000
-
-
+const dfx = require('dxf-parser')
+const Helper = require('dxf').Helper
+const fs = require('fs')
+const join = require('path').join
 app.use(cors())
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
 app.use('/api', router);
 app.use(errorHandler) // Обработка ошибок должен быть последним
+
+require.extensions['.dxf'] = function (module, filename) {
+    module.exports = fs.readFileSync(filename, 'utf8');
+};
 
 
 
@@ -48,6 +53,8 @@ io.on("connection", (socket) => {
     socket.emit('hello', 'world')
 
   });
+
+
 
 
 const start = async () => {
