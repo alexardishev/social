@@ -112,4 +112,5 @@ module.exports = {
     Rating,
     TypeBrand,
     DeviceInfo,
+    FriendsList
 }

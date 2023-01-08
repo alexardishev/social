@@ -1,7 +1,7 @@
 const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
-const {User, Basket} = require('../models/models')
+const {User, Basket, FriendsList} = require('../models/models')
 const sequelize = require('../db')
 const { Op } = require("sequelize");
 const jwt = require('jsonwebtoken');
@@ -16,8 +16,6 @@ const generateJwt = (id, email, role, activationLink,isFullData) => {
         {expiresIn: '24h'}
     )
 }
-
-console.log(Op)
 
 
 class UserController {
@@ -157,7 +155,7 @@ class UserController {
             const {id} = req.params
           
             const users = await User.findAll({
-                attributes: ['firstName', 'lastName', 'middleName', 'sex'],
+                attributes: ['id', 'firstName', 'lastName', 'middleName', 'sex',],
                     where: {
                         isActivate: true,
                         isFullData: true,
@@ -165,11 +163,11 @@ class UserController {
                             [Op.notIn]: sequelize.literal( `(SELECT "friend_id" 
                                 FROM public.friends_lists fr
                                     WHERE fr."userId" = ${id}
-                                AND fr."isAproove" = ${true})`)
+                                AND fr."isAproove" = ${true})`),
+                            [Op.ne]: `${id}`
                         }
                     }
             });
-    
             if(!users) {
                 return next(ApiError.internal(`Нет друзей`))
             }
@@ -179,11 +177,19 @@ class UserController {
         
     }
 
+    async aprooveStatus(req,res,next) {
+        const aproove = await FriendsList.findAll({
+            attributes: ['friend_id', 'isAproove'],
+        })
+
+        return res.json(aproove)
+    }
+
     async getFriendList(req, res, next) {
         const {id} = req.params
       
         const users = await User.findAll({
-            attributes: ['firstName', 'lastName', 'middleName', 'sex'],
+            attributes: ['id', 'firstName', 'lastName', 'middleName', 'sex'],
                 where: {
                     isActivate: true,
                     isFullData: true,
@@ -204,6 +210,40 @@ class UserController {
     
     
 }
+
+    async addFriends(req, res, next) {
+        const {id, friendId} = req.body
+        const friendShip = await  FriendsList.findOne({
+            where: {
+                userId: id,
+                friend_id: friendId
+            }
+        })
+
+        console.log(friendShip)
+        try {
+
+            if(friendShip) {
+                return next(ApiError.badRequest('Такой друг уже есть'));
+            }
+
+            if (!id && !friendId) {
+                return next(ApiError.badRequest('Идентификатор не существует'));
+            }
+
+            const friendRelation = await FriendsList.create({
+                    friend_id: friendId,
+                    userId: id,
+                    isAproove: false,
+                })
+                return res.json(friendRelation);
+        } catch(e) {
+            next(e);
+        } 
+
+    }
+
+
 }
 
 

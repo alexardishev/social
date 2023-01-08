@@ -7,6 +7,8 @@ const friendsApadter = createEntityAdapter();
 const initialState = friendsApadter.getInitialState({
     friendList: [],
     friendListAproove: [],
+    relationFriend: [],
+    aprooveStatus: [],
 });
 
 
@@ -20,6 +22,12 @@ const friendsListsSlice = createSlice(
             },
             loadFriendsAproove: (state, action) => {
                 state.friendListAproove = action.payload;
+            },
+            addRelationFriend: (state, action) => {
+                state.relationFriend = action.payload;
+            },
+            aprooveStatus:(state, action) => {
+                state.aprooveStatus = action.payload;
             }
         }
 
@@ -32,4 +40,6 @@ export default reducer
 export const {
     loadFriends,
     loadFriendsAproove,
+    addRelationFriend,
+    aprooveStatus
 } = actions;

@@ -1,7 +1,7 @@
 import {useHttp} from '../../hooks/https.hook';
 import { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
-import {loadFriends, loadFriendsAproove } from './friendsListsSlice'
+import {loadFriends, loadFriendsAproove, addRelationFriend, aprooveStatus} from './friendsListsSlice'
 import Cookies from 'js-cookie'
 import jwt_decode from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,8 +23,8 @@ const Friends = () => {
     const decodeToken = jwt_decode(token)
     const friendLists = useSelector(state => state.frineds.friendList);
     const friendListsAproove = useSelector(state => state.frineds.friendListAproove);
+    const aprooveStatusState = useSelector(state => state.frineds.aprooveStatus);
 
-    console.log(friendLists)
     const getFriendsNotAproove = () => {
         request(`http://localhost:5000/api/user/friendList/${decodeToken.id}`).
         then((res)=> {
@@ -34,6 +34,17 @@ const Friends = () => {
 
 
     }
+
+    const addFriend = (friendId) => {
+
+        const addedFriend = {
+            id: decodeToken.id,
+            friendId
+        }
+
+        request(`http://localhost:5000/api/user/friendList/add`, 'POST', JSON.stringify(addedFriend)).
+        then((res) => dispatch(addRelationFriend(res))).then(()=> getAprooveStatus()).catch(err => console.log(err))
+    }
      
     const getFriandsAproove = () => {
         request(`http://localhost:5000/api/user/friendListAproove/${decodeToken.id}`).
@@ -41,12 +52,19 @@ const Friends = () => {
             dispatch(loadFriendsAproove(res));
         })
     }
+
+
+    const getAprooveStatus = () => {
+        request(`http://localhost:5000/api/user/friendList/aprooveStatus`).
+        then((res)=> dispatch(aprooveStatus(res)))
+    }
     const setPathOnLoad =()=> {
         dispatch(setPath(location.pathname));
 }
 
     useEffect(()=> {
         setPathOnLoad();
+        getAprooveStatus();
         getFriandsAproove();
         getFriendsNotAproove();
     }, [])
@@ -58,9 +76,10 @@ const Friends = () => {
                     <div>{item.firstName}  {item.middleName} {item.lastName}  </div>
                     <div> {item.sex ==='male'? 'Пол: Мужской' : 'Пол: Женский'}</div>
                     <Button
-                    type="submit"
                     className={"glow-on-hover"}
-                    name= "Добавить в друзья"
+                    name= {aprooveStatusState.find(aprooveItem => aprooveItem.friend_id == item.id) ? 'Ожидает подтверждения' : 'Добавить в друзья'}
+                    click = {()=> addFriend(item.id)}
+                    disabled= {aprooveStatusState.find(aprooveItem => aprooveItem.friend_id == item.id)}
                     />
                 </div>
                 <div className='avatarUserWrapper'>

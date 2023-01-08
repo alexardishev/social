@@ -14,8 +14,6 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http, {cors: {origin:"*"}})
 const event = require('./events/event')(io)
 const PORT = process.env.PORT || 5000
-const dfx = require('dxf-parser')
-const Helper = require('dxf').Helper
 const fs = require('fs')
 const join = require('path').join
 app.use(cors())
