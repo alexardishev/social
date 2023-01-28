@@ -163,7 +163,13 @@ class UserController {
                             [Op.notIn]: sequelize.literal( `(SELECT "friend_id" 
                                 FROM public.friends_lists fr
                                     WHERE fr."userId" = ${id}
-                                AND fr."isAproove" = ${true})`),
+                                AND fr."isAproove" = ${true}
+                                )`),
+                            [Op.notIn]: sequelize.literal( `(SELECT "userId" 
+                                FROM public.friends_lists fr
+                                    WHERE fr."friend_id" = ${id}
+                                AND fr."isAproove" = ${true}
+                                )`),
                             [Op.ne]: `${id}`
                         }
                     }
@@ -194,13 +200,23 @@ class UserController {
                     isActivate: true,
                     isFullData: true,
                     id: {
-                        [Op.in]: sequelize.literal( `(SELECT "friend_id" 
-                            FROM public.friends_lists fr
-                                WHERE fr."userId" = ${id}
-                            AND fr."isAproove" = ${true})`)
-                    }
+                        [Op.or]: [{[Op.in]: sequelize.literal( `(SELECT "friend_id" 
+                        FROM public.friends_lists fr
+                            WHERE fr."userId" = ${id}
+                        AND fr."isAproove" = ${true})`)}, {[Op.in]: sequelize.literal( `(SELECT "userId" 
+                        FROM public.friends_lists fr
+                            WHERE fr."friend_id" = ${id}
+                        AND fr."isAproove" = ${true}
+                        )`)}],                     
+                    
+                  
+                    
+                    
                 }
-        });
+
+
+                    }
+                })
 
         if(!users) {
             return next(ApiError.internal(`Нет друзей`))
@@ -241,6 +257,35 @@ class UserController {
             next(e);
         } 
 
+    }
+
+    async getNeedAprooveFriends (req, res, next) {
+            const {friendId} = req.params;
+
+            if(!friendId) {
+                return next(ApiError.badRequest('Неверные данные'))
+            }
+
+
+            const users = await User.findAll({
+                attributes: ['id', 'firstName', 'lastName', 'middleName', 'sex',],
+                    where: {
+                        isActivate: true,
+                        isFullData: true,
+                        id: {
+                            [Op.in]: sequelize.literal( `(SELECT fr."userId" 
+                                FROM public.friends_lists fr
+                                    WHERE fr."friend_id" = ${friendId}
+                                AND fr."isAproove" = ${false})`)
+                        }
+                    }
+            });
+
+            if(!users) {
+                return next(ApiError.badRequest('Не существует такого'))
+            }
+
+            return res.json(users)
     }
 
 

@@ -1,4 +1,5 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import { StaticRouter } from "react-router-dom";
 
 
 const friendsApadter = createEntityAdapter();
@@ -9,6 +10,7 @@ const initialState = friendsApadter.getInitialState({
     friendListAproove: [],
     relationFriend: [],
     aprooveStatus: [],
+    friendsNeedAproove: [],
 });
 
 
@@ -28,6 +30,9 @@ const friendsListsSlice = createSlice(
             },
             aprooveStatus:(state, action) => {
                 state.aprooveStatus = action.payload;
+            },
+            friendsNeedAproove: (state, action) => {
+                state.friendsNeedAproove = action.payload;
             }
         }
 
@@ -41,5 +46,6 @@ export const {
     loadFriends,
     loadFriendsAproove,
     addRelationFriend,
-    aprooveStatus
+    aprooveStatus,
+    friendsNeedAproove
 } = actions;

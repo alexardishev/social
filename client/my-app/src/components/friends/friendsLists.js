@@ -1,7 +1,7 @@
 import {useHttp} from '../../hooks/https.hook';
 import { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
-import {loadFriends, loadFriendsAproove, addRelationFriend, aprooveStatus} from './friendsListsSlice'
+import {loadFriends, loadFriendsAproove, addRelationFriend, aprooveStatus, friendsNeedAproove} from './friendsListsSlice'
 import Cookies from 'js-cookie'
 import jwt_decode from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +24,10 @@ const Friends = () => {
     const friendLists = useSelector(state => state.frineds.friendList);
     const friendListsAproove = useSelector(state => state.frineds.friendListAproove);
     const aprooveStatusState = useSelector(state => state.frineds.aprooveStatus);
+    const friendsListsNeedAproove = useSelector(state => state.frineds.friendsNeedAproove)
+
+
+    console.log('Я рендерюсь!!!')
 
     const getFriendsNotAproove = () => {
         request(`http://localhost:5000/api/user/friendList/${decodeToken.id}`).
@@ -58,6 +62,15 @@ const Friends = () => {
         request(`http://localhost:5000/api/user/friendList/aprooveStatus`).
         then((res)=> dispatch(aprooveStatus(res)))
     }
+
+    const getNeedFriendsAproove = () => {
+        request(`http://localhost:5000/api/user/friendListNeedAproove/${decodeToken.id}`).
+        then((res)=> {
+            dispatch(friendsNeedAproove(res))
+        }).catch((e)=> console.log(e));
+    }
+
+
     const setPathOnLoad =()=> {
         dispatch(setPath(location.pathname));
 }
@@ -67,19 +80,21 @@ const Friends = () => {
         getAprooveStatus();
         getFriandsAproove();
         getFriendsNotAproove();
+        getNeedFriendsAproove();
     }, [])
     const list = friendLists.map((item)=> {
         return(
-            <>
-            <div className='friend_container_item'>
+            <div className='friend_container_item'
+            key={item.id}>
                 <div>
                     <div>{item.firstName}  {item.middleName} {item.lastName}  </div>
                     <div> {item.sex ==='male'? 'Пол: Мужской' : 'Пол: Женский'}</div>
                     <Button
                     className={"glow-on-hover"}
-                    name= {aprooveStatusState.find(aprooveItem => aprooveItem.friend_id == item.id) ? 'Ожидает подтверждения' : 'Добавить в друзья'}
+                    // name= {aprooveStatusState.find(aprooveItem => aprooveItem.friend_id == item.id) ? 'Ожидает подтверждения' : 'Добавить в друзья'}
+                    name={'Добавить в друзья'}
                     click = {()=> addFriend(item.id)}
-                    disabled= {aprooveStatusState.find(aprooveItem => aprooveItem.friend_id == item.id)}
+                    // disabled= {aprooveStatusState.find(aprooveItem => aprooveItem.friend_id == item.id)}
                     />
                 </div>
                 <div className='avatarUserWrapper'>
@@ -89,7 +104,6 @@ const Friends = () => {
 
             </div>
               
-            </>
           
           
         )
@@ -97,8 +111,8 @@ const Friends = () => {
 
     const listAproove = friendListsAproove.map((item)=> {
         return(
-            <>
-            <div className='friend_container_item aproove'>
+            <div className='friend_container_item aproove'
+             key={item.id}>
                 <div>
                     <div>{item.firstName}  {item.middleName} {item.lastName}  </div>
                     <div> {item.sex ==='male'? 'Пол: Мужской' : 'Пол: Женский'}</div>
@@ -114,10 +128,29 @@ const Friends = () => {
                
 
             </div>
-              
-            </>
-          
-          
+        )
+    })
+
+
+    const listNeedAproove = friendsListsNeedAproove.map((item)=> {
+        return(
+            <div className='friend_container_item aproove'
+             key={item.id}>
+                <div>
+                    <div>{item.firstName}  {item.middleName} {item.lastName}  </div>
+                    <div> {item.sex ==='male'? 'Пол: Мужской' : 'Пол: Женский'}</div>
+                    <Button
+                    type="submit"
+                    className={"glow-on-hover"}
+                    name= "Подтвердить"
+                    />
+                </div>
+                <div className='avatarUserWrapper'>
+                    <img className='avatarUserImg' src={holder} alt="image holder" />
+                </div>
+               
+
+            </div>
         )
     })
 
@@ -132,6 +165,7 @@ const Friends = () => {
             <div className='friend_container'>
                 {listAproove}
                 {list}
+                {listNeedAproove}
                 </div>
                 <div className='wrapper_to_img'>
                     <img src={friend} alt="friends" />
